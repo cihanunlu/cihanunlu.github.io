@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en" data-ui="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cihan Ünlü</title>
+<meta name="description" content="Cihan Ünlü — interpreter trainer, PhD student in Translation Studies, builder of tools for interpreters.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF0EE; --panel:#E2E7E5; --ink:#1C2629; --muted:#56666A; --line:#C6CFCC;
+  --accent:#1F5F5B; --tally:#D23F2A;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --text:"Newsreader",Georgia,serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141B1D; --panel:#1B2427; --ink:#E4EBE9; --muted:#97A7AA; --line:#2C393C;
+    --accent:#74B9B1; --tally:#FF6B52;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141B1D; --panel:#1B2427; --ink:#E4EBE9; --muted:#97A7AA; --line:#2C393C;
+  --accent:#74B9B1; --tally:#FF6B52;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--text);font-size:1.15rem;line-height:1.6}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.wrap{max-width:68rem;margin:0 auto;padding:0 16px}
+@media (min-width:720px){.wrap{padding:0 40px}}
+
+/* language switching */
+html[data-ui="en"] .tr, html[data-ui="tr"] .en{display:none !important}
+
+header.top{display:flex;justify-content:space-between;align-items:center;padding:22px 0;font-family:var(--display);font-size:.95rem}
+header.top .mark{font-weight:600;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+.switch{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.switch button{font:inherit;font-size:.85rem;background:none;border:0;color:var(--muted);padding:4px 12px;border-radius:999px;cursor:pointer}
+.switch button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* hero */
+.hero{padding:7vh 0 9vh}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(3.2rem,11vw,8.5rem);line-height:.9;letter-spacing:-.045em;margin:0 0 .35em;font-variation-settings:"opsz" 96}
+.role{font-family:var(--display);font-size:clamp(1.05rem,2.2vw,1.35rem);color:var(--muted);margin:0 0 3rem;max-width:40ch;line-height:1.4}
+
+.console{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 20px 16px;max-width:52rem}
+.console .bar{display:flex;justify-content:space-between;align-items:center;font-family:var(--display);font-size:.85rem;color:var(--muted);margin-bottom:14px}
+.live{display:inline-flex;align-items:center;gap:8px;color:var(--ink);font-weight:600}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--tally);box-shadow:0 0 0 4px color-mix(in srgb,var(--tally) 22%,transparent);animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{50%{opacity:.35}}
+.lag{font-variant-numeric:tabular-nums}
+.channel{display:grid;grid-template-columns:4.2rem 1fr;gap:12px;align-items:baseline;padding:12px 0;border-top:1px solid var(--line)}
+.channel .who{font-family:var(--display);font-size:.8rem;color:var(--muted)}
+.channel .who b{display:block;font-weight:600;color:var(--ink);font-size:.9rem}
+.channel p{margin:0;font-size:clamp(1.15rem,2.6vw,1.6rem);line-height:1.35;min-height:2.7em}
+.channel.booth p{color:var(--accent);font-style:italic}
+.w{opacity:0;transition:opacity .25s}
+.w.on{opacity:1}
+
+/* sections */
+section{padding:4.5rem 0;border-top:1px solid var(--line)}
+.grid{display:grid;gap:1.5rem 3rem}
+@media (min-width:860px){.grid{grid-template-columns:14rem 1fr}}
+h2{font-family:var(--display);font-weight:600;font-size:1.5rem;letter-spacing:-.02em;margin:0;line-height:1.2}
+h3{font-family:var(--display);font-weight:600;font-size:1.2rem;letter-spacing:-.01em;margin:0 0 .4rem}
+.prose p{margin:0 0 1.1em;max-width:62ch}
+.prose p:last-child{margin-bottom:0}
+.lede{font-size:1.4rem;line-height:1.5}
+
+.thesis{font-style:italic;font-size:1.3rem;line-height:1.45;max-width:46ch;margin:0 0 .6rem}
+.meta{font-family:var(--display);font-size:.92rem;color:var(--muted);margin:0 0 2.2rem}
+
+/* SRL cycle — a real sequence, so it is numbered */
+.cycle{list-style:none;margin:2rem 0 2.5rem;padding:0;display:grid;gap:12px;counter-reset:phase}
+@media (min-width:720px){.cycle{grid-template-columns:repeat(3,1fr)}}
+.cycle li{counter-increment:phase;border-left:3px solid var(--accent);padding:4px 0 4px 16px}
+.cycle li::before{content:counter(phase);font-family:var(--display);font-weight:800;font-size:2rem;line-height:1;color:var(--accent);display:block;margin-bottom:6px}
+.cycle li p{margin:0;font-size:1.02rem;color:var(--muted)}
+
+.modules{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0;list-style:none}
+.modules li{font-family:var(--display);font-size:.9rem;border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+
+.interests{list-style:none;padding:0;margin:0}
+.interests li{padding:14px 0;border-bottom:1px solid var(--line);max-width:62ch}
+.interests li:first-child{padding-top:0}
+.interests li span{display:block;color:var(--muted);font-size:1rem}
+.interests strong{color:var(--ink);font-family:var(--display);font-weight:600;font-size:1.12rem}
+
+.contact a{font-family:var(--display);font-size:clamp(1.4rem,4vw,2.2rem);font-weight:600;letter-spacing:-.02em}
+footer{padding:2.5rem 0 3rem;font-family:var(--display);font-size:.85rem;color:var(--muted);border-top:1px solid var(--line)}
+
+@media (prefers-reduced-motion:reduce){
+  .dot{animation:none}
+  .w{opacity:1;transition:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="mark" href="#">Cihan Ünlü</a>
+    <div class="switch" role="group" aria-label="Language / Dil">
+      <button type="button" data-set="en" aria-pressed="true">EN</button>
+      <button type="button" data-set="tr" aria-pressed="false">TR</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" style="border-top:0" aria-labelledby="name">
+      <h1 id="name">Cihan<br>Ünlü</h1>
+      <p class="role">
+        <span class="en">Research assistant in interpreting, PhD student in Translation Studies, and builder of software for interpreters.</span>
+        <span class="tr">Sözlü çeviri alanında araştırma görevlisi, Çeviribilim doktora öğrencisi, tercümanlar için yazılım geliştiren biri.</span>
+      </p>
+
+      <div class="console" aria-label="Interpreting demo">
+        <div class="bar">
+          <span class="live"><span class="dot" aria-hidden="true"></span><span class="en">Live</span><span class="tr">Canlı</span></span>
+          <span class="lag"><span class="en">Ear–voice span</span><span class="tr">Kulak–ses aralığı</span> <span id="lag">0.0</span> s</span>
+        </div>
+        <div class="channel floor">
+          <div class="who"><b>EN</b><span class="en">Speaker</span><span class="tr">Konuşmacı</span></div>
+          <p id="src" lang="en"></p>
+        </div>
+        <div class="channel booth">
+          <div class="who"><b>TR</b><span class="en">Booth</span><span class="tr">Kabin</span></div>
+          <p id="tgt" lang="tr"></p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="about">
+      <div class="grid">
+        <h2 id="about"><span class="en">About</span><span class="tr">Hakkımda</span></h2>
+        <div class="prose">
+          <p class="lede en">I work where interpreter training meets speech technology: how students practise when no one is watching, and what software can do to make that practice deliberate rather than accidental.</p>
+          <p class="lede tr">Sözlü çeviri eğitimiyle konuşma teknolojilerinin kesiştiği yerde çalışıyorum: öğrenciler kimse izlemezken nasıl pratik yapıyor ve yazılım bu pratiği rastlantısal olmaktan çıkarıp bilinçli hale getirmek için ne yapabilir?</p>
+          <p class="en">I'm a research assistant in the Department of English Translation and Interpreting at Istanbul Yeni Yüzyıl University, and a PhD student in Translation Studies at Boğaziçi University, where I'm supervised by Prof. Dr. Ebru Diriker.</p>
+          <p class="tr">İstanbul Yeni Yüzyıl Üniversitesi İngilizce Mütercim ve Tercümanlık Bölümü'nde araştırma görevlisiyim. Boğaziçi Üniversitesi Çeviribilim doktora programında Prof. Dr. Ebru Diriker danışmanlığında doktoramı sürdürüyorum.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="research">
+      <div class="grid">
+        <h2 id="research"><span class="en">Research</span><span class="tr">Araştırma</span></h2>
+        <div>
+          <p class="thesis en">A Self-Regulated Learning Approach to Design and Evaluation of the Digital Interpreter Training Environment TerpWise</p>
+          <p class="thesis tr">Dijital Sözlü Çeviri Eğitim Ortamı TerpWise'ın Tasarımı ve Değerlendirmesine Öz-Düzenlemeli Öğrenme Yaklaşımı</p>
+          <p class="meta"><span class="en">Doctoral dissertation, Boğaziçi University, in progress</span><span class="tr">Doktora tezi, Boğaziçi Üniversitesi, devam ediyor</span></p>
+
+          <div class="prose">
+            <p class="en">Most interpreting practice happens outside class, alone, and without much structure. TerpWise is a web platform that wraps that practice in Zimmerman's cycle of self-regulated learning and fills it with the principles of deliberate practice. The design starts from theory rather than adding it afterwards.</p>
+            <p class="tr">Sözlü çeviri pratiğinin büyük kısmı ders dışında, tek başına ve pek bir yapı olmadan yapılıyor. TerpWise bu pratiği Zimmerman'ın öz-düzenlemeli öğrenme döngüsüne oturtan ve bilinçli pratik ilkeleriyle dolduran web tabanlı bir platform. Tasarım kuramdan yola çıkıyor, kuramı sonradan eklemiyor.</p>
+          </div>
+
+          <ol class="cycle">
+            <li><h3><span class="en">Forethought</span><span class="tr">Ön düşünme</span></h3><p class="en">Set a goal, pick a speech, build a glossary.</p><p class="tr">Hedef koy, konuşma seç, terimce hazırla.</p></li>
+            <li><h3><span class="en">Performance</span><span class="tr">Performans</span></h3><p class="en">Interpret, and drill the sub-skills that need work.</p><p class="tr">Çeviri yap, eksik alt becerileri çalış.</p></li>
+            <li><h3><span class="en">Reflection</span><span class="tr">Öz-yansıtma</span></h3><p class="en">Review the recording, get feedback, plan the next round.</p><p class="tr">Kaydı incele, geri bildirim al, sonraki turu planla.</p></li>
+          </ol>
+
+          <ul class="modules" aria-label="TerpWise modules">
+            <li>Speech Library</li><li>Glossary Builder</li><li>Micro-Drills</li><li>Analyze</li><li>Evaluate</li><li>Progress Tracking</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="interests">
+      <div class="grid">
+        <h2 id="interests"><span class="en">Interests</span><span class="tr">İlgi alanları</span></h2>
+        <ul class="interests">
+          <li><span class="en"><strong>Computer-assisted interpreter training</strong></span><span class="tr"><strong>Bilgisayar destekli sözlü çeviri eğitimi</strong></span>
+            <span class="en">What digital tools actually afford learners, and where current taxonomies fall short.</span><span class="tr">Dijital araçların öğrenciye gerçekte ne sunduğu ve mevcut sınıflandırmaların nerede yetersiz kaldığı.</span></li>
+          <li><span class="en"><strong>Self-regulated learning and self-efficacy</strong></span><span class="tr"><strong>Öz-düzenlemeli öğrenme ve öz-yeterlik</strong></span>
+            <span class="en">How student interpreters plan, monitor and judge their own practice.</span><span class="tr">Tercüman adaylarının kendi pratiklerini nasıl planladığı, izlediği ve değerlendirdiği.</span></li>
+          <li><span class="en"><strong>Machine interpreting</strong></span><span class="tr"><strong>Makine çevirisiyle sözlü çeviri</strong></span>
+            <span class="en">Speech recognition and translation cascades, and telling recognition errors apart from translation errors.</span><span class="tr">Konuşma tanıma ve çeviri zincirleri; tanıma hatalarını çeviri hatalarından ayırmak.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="building">
+      <div class="grid">
+        <h2 id="building"><span class="en">Building</span><span class="tr">Geliştirdiklerim</span></h2>
+        <div class="prose">
+          <p class="en">Besides TerpWise, I build real-time speech translation: streaming recognition, machine translation, and the infrastructure that keeps latency low enough for a listener to follow along.</p>
+          <p class="tr">TerpWise'ın yanı sıra gerçek zamanlı konuşma çevirisi geliştiriyorum: akış halinde konuşma tanıma, makine çevirisi ve gecikmeyi dinleyicinin takip edebileceği kadar düşük tutan altyapı.</p>
+          <p class="en">Off duty: Assassin's Creed (preferably without the grind), EA FC on Xbox, and couch co-op chaos in Overcooked 2.</p>
+          <p class="tr">Mesai dışında: Assassin's Creed (mümkünse grind'sız), Xbox'ta EA FC ve Overcooked 2'de kanepe kaosu.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="contact" class="contact">
+      <div class="grid">
+        <h2 id="contact"><span class="en">Contact</span><span class="tr">İletişim</span></h2>
+        <div>
+          <a href="https://github.com/cihanunlu">github.com/cihanunlu</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>© 2026 Cihan Ünlü</footer>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function setLang(l){
+    root.setAttribute('data-ui',l); root.lang=l;
+    document.querySelectorAll('.switch button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.set===l?'true':'false')});
+    try{localStorage.setItem('ui-lang',l)}catch(e){}
+  }
+  var saved=null; try{saved=localStorage.getItem('ui-lang')}catch(e){}
+  if(saved==='tr'||saved==='en') setLang(saved);
+  document.querySelectorAll('.switch button').forEach(function(b){b.addEventListener('click',function(){setLang(b.dataset.set)})});
+
+  var pairs=[
+    ["I study how interpreters learn to practise on their own.","Tercümanların kendi başlarına pratik yapmayı nasıl öğrendiğini inceliyorum."],
+    ["And I build the tools that help them do it.","Ve bunu yapmalarına yardımcı olan araçları geliştiriyorum."],
+    ["Always between two languages, a second or two behind.","Hep iki dil arasında, bir iki saniye geriden."]
+  ];
+  var src=document.getElementById('src'), tgt=document.getElementById('tgt'), lag=document.getElementById('lag');
+  function fill(el,text){el.innerHTML='';return text.split(' ').map(function(w,i,a){var s=document.createElement('span');s.className='w';s.textContent=w+(i<a.length-1?' ':'');el.appendChild(s);return s})}
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){src.textContent=pairs[0][0];tgt.textContent=pairs[0][1];lag.textContent='1.8';return}
+
+  var STEP=330, DELAY=1800, i=0, t0=0, timers=[];
+  function play(){
+    var p=pairs[i%pairs.length]; i++;
+    var a=fill(src,p[0]), b=fill(tgt,p[1]);
+    t0=performance.now();
+    a.forEach(function(s,k){timers.push(setTimeout(function(){s.classList.add('on')},k*STEP))});
+    var bStep=Math.max(240,(a.length*STEP)/b.length);
+    b.forEach(function(s,k){timers.push(setTimeout(function(){s.classList.add('on')},DELAY+k*bStep))});
+    var end=DELAY+b.length*bStep+2600;
+    timers.push(setTimeout(play,end));
+  }
+  function tick(){
+    var e=(performance.now()-t0)/1000;
+    var v=e<DELAY/1000?e:DELAY/1000+Math.sin(e*1.7)*.15;
+    lag.textContent=Math.max(0,v).toFixed(1);
+    requestAnimationFrame(tick);
+  }
+  play(); requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
