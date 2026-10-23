@@ -1,257 +1,1100 @@
-<!doctype html>
-<html lang="en" data-ui="en">
+<!DOCTYPE html>
+<html lang="tr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cihan Ünlü</title>
-<meta name="description" content="Cihan Ünlü — interpreter trainer, PhD student in Translation Studies, builder of tools for interpreters.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#EDF0EE; --panel:#E2E7E5; --ink:#1C2629; --muted:#56666A; --line:#C6CFCC;
-  --accent:#1F5F5B; --tally:#D23F2A;
-  --display:"Bricolage Grotesque",system-ui,sans-serif;
-  --text:"Newsreader",Georgia,serif;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#141B1D; --panel:#1B2427; --ink:#E4EBE9; --muted:#97A7AA; --line:#2C393C;
-    --accent:#74B9B1; --tally:#FF6B52;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#141B1D; --panel:#1B2427; --ink:#E4EBE9; --muted:#97A7AA; --line:#2C393C;
-  --accent:#74B9B1; --tally:#FF6B52;
-}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--text);font-size:1.15rem;line-height:1.6}
-a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
-a:hover{text-decoration-thickness:2px}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
-.wrap{max-width:68rem;margin:0 auto;padding:0 16px}
-@media (min-width:720px){.wrap{padding:0 40px}}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cihan Ünlü | Sözlü Çevirmen - Interpreter</title>
+  
+  <!-- Google Fonts: Poppins & Playfair Display (Zarif Başlıklar İçin) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-/* language switching */
-html[data-ui="en"] .tr, html[data-ui="tr"] .en{display:none !important}
+  <style>
+    /* =========================================================
+       1. RENKLER VE TEMA AYARLARI (LACİVERT & KREM)
+       Buradaki renk kodlarını zevkinize göre değiştirebilirsiniz.
+       ========================================================= */
+    :root {
+      --bg-cream: #fbf9f5;         /* Ana arka plan: Sıcak krem */
+      --bg-cream-card: #ffffff;    /* Kart arka planı: Temiz kırık beyaz */
+      --bg-cream-soft: #f4efe6;    /* Vurgulu bloklar için yumuşak krem */
+      --navy-deep: #0a1128;        /* Koyu lacivert (ana başlıklar ve butonlar) */
+      --navy-light: #1c2541;       /* İkincil lacivert */
+      --navy-muted: #3a4768;       /* Gövde metinleri için yumuşak lacivert */
+      --gold-accent: #b48a3c;      /* Çeviri & prestij vurgusu: Altın / Şampanya */
+      --gold-light: #f7eedb;       /* Açık altın arka plan */
+      --border-color: #e8e2d5;     /* Zarif krem sınır çizgileri */
+      --text-muted: #64748b;       /* Açıklama metinleri */
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --shadow-soft: 0 4px 20px -2px rgba(10, 17, 40, 0.05);
+      --shadow-hover: 0 12px 30px -4px rgba(10, 17, 40, 0.1);
+      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-header.top{display:flex;justify-content:space-between;align-items:center;padding:22px 0;font-family:var(--display);font-size:.95rem}
-header.top .mark{font-weight:600;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
-.switch{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px}
-.switch button{font:inherit;font-size:.85rem;background:none;border:0;color:var(--muted);padding:4px 12px;border-radius:999px;cursor:pointer}
-.switch button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-/* hero */
-.hero{padding:7vh 0 9vh}
-.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(3.2rem,11vw,8.5rem);line-height:.9;letter-spacing:-.045em;margin:0 0 .35em;font-variation-settings:"opsz" 96}
-.role{font-family:var(--display);font-size:clamp(1.05rem,2.2vw,1.35rem);color:var(--muted);margin:0 0 3rem;max-width:40ch;line-height:1.4}
+    html {
+      scroll-behavior: smooth;
+    }
 
-.console{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 20px 16px;max-width:52rem}
-.console .bar{display:flex;justify-content:space-between;align-items:center;font-family:var(--display);font-size:.85rem;color:var(--muted);margin-bottom:14px}
-.live{display:inline-flex;align-items:center;gap:8px;color:var(--ink);font-weight:600}
-.dot{width:9px;height:9px;border-radius:50%;background:var(--tally);box-shadow:0 0 0 4px color-mix(in srgb,var(--tally) 22%,transparent);animation:blink 1.6s ease-in-out infinite}
-@keyframes blink{50%{opacity:.35}}
-.lag{font-variant-numeric:tabular-nums}
-.channel{display:grid;grid-template-columns:4.2rem 1fr;gap:12px;align-items:baseline;padding:12px 0;border-top:1px solid var(--line)}
-.channel .who{font-family:var(--display);font-size:.8rem;color:var(--muted)}
-.channel .who b{display:block;font-weight:600;color:var(--ink);font-size:.9rem}
-.channel p{margin:0;font-size:clamp(1.15rem,2.6vw,1.6rem);line-height:1.35;min-height:2.7em}
-.channel.booth p{color:var(--accent);font-style:italic}
-.w{opacity:0;transition:opacity .25s}
-.w.on{opacity:1}
+    body {
+      background-color: var(--bg-cream);
+      color: var(--navy-deep);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
 
-/* sections */
-section{padding:4.5rem 0;border-top:1px solid var(--line)}
-.grid{display:grid;gap:1.5rem 3rem}
-@media (min-width:860px){.grid{grid-template-columns:14rem 1fr}}
-h2{font-family:var(--display);font-weight:600;font-size:1.5rem;letter-spacing:-.02em;margin:0;line-height:1.2}
-h3{font-family:var(--display);font-weight:600;font-size:1.2rem;letter-spacing:-.01em;margin:0 0 .4rem}
-.prose p{margin:0 0 1.1em;max-width:62ch}
-.prose p:last-child{margin-bottom:0}
-.lede{font-size:1.4rem;line-height:1.5}
+    /* Konteyner Boyutu */
+    .container {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
 
-.thesis{font-style:italic;font-size:1.3rem;line-height:1.45;max-width:46ch;margin:0 0 .6rem}
-.meta{font-family:var(--display);font-size:.92rem;color:var(--muted);margin:0 0 2.2rem}
+    /* Tipografi */
+    h1, h2, h3, .serif-font {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
 
-/* SRL cycle — a real sequence, so it is numbered */
-.cycle{list-style:none;margin:2rem 0 2.5rem;padding:0;display:grid;gap:12px;counter-reset:phase}
-@media (min-width:720px){.cycle{grid-template-columns:repeat(3,1fr)}}
-.cycle li{counter-increment:phase;border-left:3px solid var(--accent);padding:4px 0 4px 16px}
-.cycle li::before{content:counter(phase);font-family:var(--display);font-weight:800;font-size:2rem;line-height:1;color:var(--accent);display:block;margin-bottom:6px}
-.cycle li p{margin:0;font-size:1.02rem;color:var(--muted)}
+    p {
+      color: var(--navy-muted);
+      font-size: 0.98rem;
+    }
 
-.modules{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0;list-style:none}
-.modules li{font-family:var(--display);font-size:.9rem;border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: var(--transition);
+    }
 
-.interests{list-style:none;padding:0;margin:0}
-.interests li{padding:14px 0;border-bottom:1px solid var(--line);max-width:62ch}
-.interests li:first-child{padding-top:0}
-.interests li span{display:block;color:var(--muted);font-size:1rem}
-.interests strong{color:var(--ink);font-family:var(--display);font-weight:600;font-size:1.12rem}
+    /* =========================================================
+       2. ÜST MENÜ (NAVBAR)
+       ========================================================= */
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(251, 249, 245, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 100;
+      border-bottom: 1px solid var(--border-color);
+      transition: var(--transition);
+    }
 
-.contact a{font-family:var(--display);font-size:clamp(1.4rem,4vw,2.2rem);font-weight:600;letter-spacing:-.02em}
-footer{padding:2.5rem 0 3rem;font-family:var(--display);font-size:.85rem;color:var(--muted);border-top:1px solid var(--line)}
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
 
-@media (prefers-reduced-motion:reduce){
-  .dot{animation:none}
-  .w{opacity:1;transition:none}
-}
-</style>
+    .brand-logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--navy-deep);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-logo .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--gold-accent);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--navy-muted);
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--navy-deep);
+    }
+
+    /* Dil Değiştirici Buton (TR / EN) */
+    .lang-switcher {
+      background: var(--bg-cream-soft);
+      border: 1px solid var(--border-color);
+      border-radius: 99px;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+    }
+
+    .lang-btn {
+      border: none;
+      background: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 99px;
+      cursor: pointer;
+      color: var(--navy-muted);
+      transition: var(--transition);
+    }
+
+    .lang-btn.active {
+      background: var(--navy-deep);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(10, 17, 40, 0.15);
+    }
+
+    /* Mobil Menü Butonu */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--navy-deep);
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    /* =========================================================
+       3. HERO / GİRİŞ BÖLÜMÜ
+       ========================================================= */
+    .hero-section {
+      padding: 80px 0 60px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-cream-soft);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--navy-deep);
+      margin-bottom: 24px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    /* Çevirmen Detayı: Dil Çifti Rozeti */
+    .language-pair-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      padding: 6px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--navy-deep);
+      box-shadow: var(--shadow-soft);
+      margin-left: 8px;
+    }
+
+    .language-pair-pill span.arrow {
+      color: var(--gold-accent);
+      font-size: 0.95rem;
+    }
+
+    .hero-title {
+      font-size: 3.2rem;
+      line-height: 1.15;
+      color: var(--navy-deep);
+      margin-bottom: 16px;
+      min-height: 75px; /* Yazı efekti için alan */
+    }
+
+    /* Daktilo / Typewriter İmleci */
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      background-color: var(--gold-accent);
+      animation: blink 0.8s infinite;
+      margin-left: 4px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--navy-muted);
+      margin-bottom: 24px;
+      max-width: 640px;
+      font-weight: 400;
+    }
+
+    .hero-institution {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--navy-deep);
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 36px;
+    }
+
+    .hero-institution svg {
+      color: var(--gold-accent);
+    }
+
+    .hero-cta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* Butonlar */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      font-size: 0.92rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background: var(--navy-deep);
+      color: #ffffff;
+      border: 1px solid var(--navy-deep);
+    }
+
+    .btn-primary:hover {
+      background: var(--navy-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--navy-deep);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-outline:hover {
+      background: #ffffff;
+      border-color: var(--navy-deep);
+      transform: translateY(-2px);
+    }
+
+    /* =========================================================
+       4. BÖLÜM YAPILARI
+       ========================================================= */
+    section {
+      padding: 50px 0;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+    }
+
+    .section-tag {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gold-accent);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      color: var(--navy-deep);
+    }
+
+    /* =========================================================
+       5. HAKKIMDA BÖLÜMÜ
+       ========================================================= */
+    .about-card {
+      background: var(--bg-cream-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--gold-accent);
+    }
+
+    .about-lead {
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--navy-deep);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .placeholder-badge {
+      background: #fffbeb;
+      border: 1px dashed #d97706;
+      color: #92400e;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-family: monospace;
+    }
+
+    /* =========================================================
+       6. PROJELER VE ÇALIŞMALAR
+       ========================================================= */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      background: var(--bg-cream-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--navy-muted);
+    }
+
+    .project-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gold-accent);
+      margin-bottom: 8px;
+    }
+
+    .project-title {
+      font-size: 1.25rem;
+      color: var(--navy-deep);
+      margin-bottom: 10px;
+    }
+
+    .project-desc {
+      font-size: 0.92rem;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--navy-deep);
+    }
+
+    .project-link:hover {
+      color: var(--gold-accent);
+      gap: 9px;
+    }
+
+    /* =========================================================
+       7. BECERİLER (SKILLS)
+       ========================================================= */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .skill-category {
+      background: var(--bg-cream-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .skill-cat-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--navy-deep);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skill-pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-pill {
+      background: var(--bg-cream-soft);
+      border: 1px solid var(--border-color);
+      color: var(--navy-deep);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 99px;
+    }
+
+    /* =========================================================
+       8. DENEYİM (EXPERIENCE)
+       ========================================================= */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .timeline-item {
+      background: var(--bg-cream-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 20px;
+    }
+
+    .timeline-date {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gold-accent);
+    }
+
+    .timeline-role {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--navy-deep);
+      margin-bottom: 4px;
+    }
+
+    .timeline-org {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--navy-muted);
+      margin-bottom: 8px;
+    }
+
+    /* =========================================================
+       9. İLGİ ALANLARI VE HOBİLER
+       ========================================================= */
+    .interests-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .interest-pill {
+      background: var(--bg-cream-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 20px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--navy-deep);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition);
+    }
+
+    .interest-pill:hover {
+      border-color: var(--gold-accent);
+      transform: translateY(-2px);
+    }
+
+    /* =========================================================
+       10. İLETİŞİM VE FOOTER
+       ========================================================= */
+    .contact-card {
+      background: var(--navy-deep);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 44px 36px;
+      box-shadow: var(--shadow-hover);
+    }
+
+    .contact-card h2 {
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .contact-card p {
+      color: #cbd5e1;
+      margin-bottom: 28px;
+      max-width: 540px;
+    }
+
+    .contact-methods {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .contact-item {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: var(--transition);
+    }
+
+    .contact-item:hover {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .contact-icon {
+      color: var(--gold-accent);
+    }
+
+    .contact-label {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .contact-val {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: #ffffff;
+      word-break: break-all;
+    }
+
+    footer {
+      padding: 36px 0;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* =========================================================
+       11. MOBİL UYUMLULUK (RESPONSIVE)
+       ========================================================= */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.3rem;
+      }
+      .nav-links {
+        display: none; /* Mobilde sade görünüm */
+      }
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .about-card {
+        padding: 24px;
+      }
+      .contact-card {
+        padding: 30px 20px;
+      }
+      .hero-section {
+        padding: 50px 0 40px;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <a class="mark" href="#">Cihan Ünlü</a>
-    <div class="switch" role="group" aria-label="Language / Dil">
-      <button type="button" data-set="en" aria-pressed="true">EN</button>
-      <button type="button" data-set="tr" aria-pressed="false">TR</button>
+
+  <!-- ==========================================
+       ÜST MENÜ (NAVBAR) & DİL SEÇİCİ
+       ========================================== -->
+  <header>
+    <div class="container nav-wrapper">
+      <a href="#" class="brand-logo">
+        <span>Cihan Ünlü</span>
+        <span class="dot"></span>
+      </a>
+
+      <!-- Menü Linkleri -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#about" data-tr="Hakkımda" data-en="About">Hakkımda</a></li>
+          <li><a href="#projects" data-tr="Çalışmalar" data-en="Projects">Çalışmalar</a></li>
+          <li><a href="#skills" data-tr="Beceriler" data-en="Skills">Beceriler</a></li>
+          <li><a href="#experience" data-tr="Deneyim" data-en="Experience">Deneyim</a></li>
+          <li><a href="#contact" data-tr="İletişim" data-en="Contact">İletişim</a></li>
+        </ul>
+      </nav>
+
+      <!-- Çift Dil Geçiş Düğmesi (TR / EN) -->
+      <div class="lang-switcher" title="Dil Değiştir / Switch Language">
+        <button class="lang-btn active" id="btnLangTR" onclick="setLanguage('tr')">TR</button>
+        <button class="lang-btn" id="btnLangEN" onclick="setLanguage('en')">EN</button>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="hero" style="border-top:0" aria-labelledby="name">
-      <h1 id="name">Cihan<br>Ünlü</h1>
-      <p class="role">
-        <span class="en">Research assistant in interpreting, PhD student in Translation Studies, and builder of software for interpreters.</span>
-        <span class="tr">Sözlü çeviri alanında araştırma görevlisi, Çeviribilim doktora öğrencisi, tercümanlar için yazılım geliştiren biri.</span>
+  <!-- ==========================================
+       HERO / GİRİŞ ALANI (Açılışta daktilo efekti)
+       ========================================== -->
+  <section class="hero-section">
+    <div class="container">
+      
+      <!-- Durum Rozeti & Dil Çifti -->
+      <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+        <div class="hero-badge">
+          <span class="status-dot"></span>
+          <span data-tr="Sözlü Çeviri Taleplerine Açık" data-en="Available for Interpretation Projects">Sözlü Çeviri Taleplerine Açık</span>
+        </div>
+        
+        <!-- Çevirmen Olduğunuzu Gösteren Özel Rozet -->
+        <div class="language-pair-pill" title="Çalışma Dilleri">
+          <span>İngilizce</span>
+          <span class="arrow">⇄</span>
+          <span>Türkçe</span>
+        </div>
+      </div>
+
+      <!-- Daktilo ile yazılan isim alanı -->
+      <h1 class="hero-title">
+        <span id="typewriterText"></span><span class="cursor">&nbsp;</span>
+      </h1>
+
+      <p class="hero-subtitle" data-tr="Sözlü çevirmenim. İngilizce ve Türkçe dilleri arasında pürüzsüz, dinamik ve kültürel bağlamı gözeten iletişim köprüleri kuruyorum." data-en="I am an interpreter. I build seamless, dynamic, and culturally nuanced communication bridges between English and Turkish.">
+        Sözlü çevirmenim. İngilizce ve Türkçe dilleri arasında pürüzsüz, dinamik ve kültürel bağlamı gözeten iletişim köprüleri kuruyorum.
       </p>
 
-      <div class="console" aria-label="Interpreting demo">
-        <div class="bar">
-          <span class="live"><span class="dot" aria-hidden="true"></span><span class="en">Live</span><span class="tr">Canlı</span></span>
-          <span class="lag"><span class="en">Ear–voice span</span><span class="tr">Kulak–ses aralığı</span> <span id="lag">0.0</span> s</span>
-        </div>
-        <div class="channel floor">
-          <div class="who"><b>EN</b><span class="en">Speaker</span><span class="tr">Konuşmacı</span></div>
-          <p id="src" lang="en"></p>
-        </div>
-        <div class="channel booth">
-          <div class="who"><b>TR</b><span class="en">Booth</span><span class="tr">Kabin</span></div>
-          <p id="tgt" lang="tr"></p>
-        </div>
+      <!-- Üniversite & Bölüm Bilgisi -->
+      <div class="hero-institution">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+          <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+        </svg>
+        <span>
+          <strong>Essex Üniversitesi</strong> • 
+          <!-- BÖLÜM ADINIZI AŞAĞIDAKİ YERE YAZIN -->
+          <span class="placeholder-badge">[Bölüm adınızı buraya ekleyin]</span>
+        </span>
       </div>
-    </section>
 
-    <section aria-labelledby="about">
-      <div class="grid">
-        <h2 id="about"><span class="en">About</span><span class="tr">Hakkımda</span></h2>
-        <div class="prose">
-          <p class="lede en">I work where interpreter training meets speech technology: how students practise when no one is watching, and what software can do to make that practice deliberate rather than accidental.</p>
-          <p class="lede tr">Sözlü çeviri eğitimiyle konuşma teknolojilerinin kesiştiği yerde çalışıyorum: öğrenciler kimse izlemezken nasıl pratik yapıyor ve yazılım bu pratiği rastlantısal olmaktan çıkarıp bilinçli hale getirmek için ne yapabilir?</p>
-          <p class="en">I'm a research assistant in the Department of English Translation and Interpreting at Istanbul Yeni Yüzyıl University, and a PhD student in Translation Studies at Boğaziçi University, where I'm supervised by Prof. Dr. Ebru Diriker.</p>
-          <p class="tr">İstanbul Yeni Yüzyıl Üniversitesi İngilizce Mütercim ve Tercümanlık Bölümü'nde araştırma görevlisiyim. Boğaziçi Üniversitesi Çeviribilim doktora programında Prof. Dr. Ebru Diriker danışmanlığında doktoramı sürdürüyorum.</p>
-        </div>
+      <!-- Hızlı Eylem Düğmeleri -->
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary" data-tr="İletişime Geç" data-en="Get in Touch">
+          <span>İletişime Geç</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+        <a href="#projects" class="btn btn-outline" data-tr="Çalışmalarımı Gör" data-en="View Work">
+          <span>Çalışmalarımı Gör</span>
+        </a>
       </div>
-    </section>
 
-    <section aria-labelledby="research">
-      <div class="grid">
-        <h2 id="research"><span class="en">Research</span><span class="tr">Araştırma</span></h2>
-        <div>
-          <p class="thesis en">A Self-Regulated Learning Approach to Design and Evaluation of the Digital Interpreter Training Environment TerpWise</p>
-          <p class="thesis tr">Dijital Sözlü Çeviri Eğitim Ortamı TerpWise'ın Tasarımı ve Değerlendirmesine Öz-Düzenlemeli Öğrenme Yaklaşımı</p>
-          <p class="meta"><span class="en">Doctoral dissertation, Boğaziçi University, in progress</span><span class="tr">Doktora tezi, Boğaziçi Üniversitesi, devam ediyor</span></p>
+    </div>
+  </section>
 
-          <div class="prose">
-            <p class="en">Most interpreting practice happens outside class, alone, and without much structure. TerpWise is a web platform that wraps that practice in Zimmerman's cycle of self-regulated learning and fills it with the principles of deliberate practice. The design starts from theory rather than adding it afterwards.</p>
-            <p class="tr">Sözlü çeviri pratiğinin büyük kısmı ders dışında, tek başına ve pek bir yapı olmadan yapılıyor. TerpWise bu pratiği Zimmerman'ın öz-düzenlemeli öğrenme döngüsüne oturtan ve bilinçli pratik ilkeleriyle dolduran web tabanlı bir platform. Tasarım kuramdan yola çıkıyor, kuramı sonradan eklemiyor.</p>
+  <!-- ==========================================
+       1. HAKKIMDA (ABOUT ME)
+       ========================================== -->
+  <section id="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-tr="Tanışalım" data-en="Profile">Tanışalım</span>
+        <h2 class="section-title" data-tr="Hakkımda" data-en="About Me">Hakkımda</h2>
+      </div>
+
+      <div class="about-card">
+        <p class="about-lead" data-tr="Essex Üniversitesi'nde [Bölüm adını buraya ekleyin] öğrencisi ve İngilizce - Türkçe çalışma dillerine sahip bir sözlü çevirmen adayıyım." data-en="I am an interpreter candidate working with English and Turkish, studying [Add your department here] at the University of Essex.">
+          Essex Üniversitesi'nde <span class="placeholder-badge">[Bölüm adınızı buraya ekleyin]</span> öğrencisi ve İngilizce - Türkçe çalışma dillerine sahip bir sözlü çevirmen adayıyım.
+        </p>
+
+        <!-- Kendi cümlelerinizle düzenleyebileceğiniz 3-4 cümlelik açıklama -->
+        <p style="margin-bottom: 14px;" data-tr="[Neden bu bölümü seçtiğinizi buraya 1 cümleyle ekleyin. Örnek: Dillerin yalnızca kelimelerden ibaret olmadığını, kültürler ve insanlar arasında canlı birer bağ oluşturduğunu fark ettiğim günden beri çeviribilime tutkuyla bağlıyım.]" data-en="[Add 1 sentence on why you chose this path. Example: Passionate about bridging linguistic and cultural boundaries through real-time communication.]">
+          <span class="placeholder-badge">[Neden bu bölümü seçtiğinizi buraya 1 cümleyle ekleyin]</span>
+        </p>
+
+        <p style="margin-bottom: 14px;" data-tr="[Çeviride neleri sevdiğinizi buraya ekleyin. Örnek: Konferans ve toplantılarda konuşmacının ritmini yakalamayı, terminolojik doğruluğu korurken pürüzsüz ve doğal bir dinleme deneyimi sunmayı seviyorum.]" data-en="[Add what you enjoy in interpretation. Example: I love capturing the natural cadence of speakers while preserving rigorous terminological precision.]">
+          <span class="placeholder-badge">[Neleri sevdiğinizi buraya 1 cümleyle ekleyin]</span>
+        </p>
+
+        <p data-tr="[Gelecek hedefinizi buraya ekleyin. Örnek: Hedefim uluslararası organizasyonlar, akademik paneller ve diplomatik toplantılarda güvenilir bir sözlü çevirmen olarak küresel diyaloğa katkıda bulunmak.]" data-en="[Add your ultimate goal here. Example: Aiming to provide high-level conference and liaison interpretation for global organizations and corporate events.]">
+          <span class="placeholder-badge">[Hedefinizi buraya 1 cümleyle ekleyin]</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       2. PROJELERİM / ÇALIŞMALARIM
+       ========================================== -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-tr="Portfolyo" data-en="Portfolio">Portfolyo</span>
+        <h2 class="section-title" data-tr="Projelerim & Çalışmalarım" data-en="Projects & Works">Projelerim & Çalışmalarım</h2>
+      </div>
+
+      <div class="projects-grid">
+        <!-- Proje 1 (Mevcut Flashcard çalışması harika bir örnek) -->
+        <div class="project-card">
+          <div>
+            <div class="project-tag" data-tr="Web & Terminoloji Aracı" data-en="Web & Terminology Tool">Web & Terminoloji Aracı</div>
+            <h3 class="project-title">Glossary Flashcards</h3>
+            <p class="project-desc" data-tr="Çevirmenler ve dil uzmanları için sunucusuz, Türkçe karakter ve Excel/CSV destekli interaktif terim çalışma kartı uygulaması." data-en="A serverless, client-side flashcard app designed for translators and interpreters to master terminology with CSV/Excel support.">
+              Çevirmenler ve dil uzmanları için sunucusuz, Türkçe karakter ve Excel/CSV destekli interaktif terim çalışma kartı uygulaması.
+            </p>
           </div>
+          <a href="#" class="project-link" data-tr="Projeyi İncele →" data-en="View Project →">
+            <span>Projeyi İncele</span> <span>→</span>
+          </a>
+        </div>
 
-          <ol class="cycle">
-            <li><h3><span class="en">Forethought</span><span class="tr">Ön düşünme</span></h3><p class="en">Set a goal, pick a speech, build a glossary.</p><p class="tr">Hedef koy, konuşma seç, terimce hazırla.</p></li>
-            <li><h3><span class="en">Performance</span><span class="tr">Performans</span></h3><p class="en">Interpret, and drill the sub-skills that need work.</p><p class="tr">Çeviri yap, eksik alt becerileri çalış.</p></li>
-            <li><h3><span class="en">Reflection</span><span class="tr">Öz-yansıtma</span></h3><p class="en">Review the recording, get feedback, plan the next round.</p><p class="tr">Kaydı incele, geri bildirim al, sonraki turu planla.</p></li>
-          </ol>
+        <!-- Proje 2 (Düzenlenebilir Alan) -->
+        <div class="project-card">
+          <div>
+            <div class="project-tag" data-tr="Sözlü Çeviri / Proje" data-en="Interpretation / Project">Sözlü Çeviri / Proje</div>
+            <h3 class="project-title"><span class="placeholder-badge">[Proje 2 Adı]</span></h3>
+            <p class="project-desc" data-tr="[Bu projenin konusunu ve amacını anlatan 1-2 cümle ekleyin. Örnek: Üniversite konferans simülasyonu kapsamında yapılan 45 dakikalık ikili ardıl çeviri çalışması.]" data-en="[Add 1-2 sentences describing Project 2. Example: Mock conference interpretation or bilingual glossary compilation.]">
+              <span class="placeholder-badge">[Proje 2 için 1-2 cümle açıklama ekleyin]</span>
+            </p>
+          </div>
+          <a href="#" class="project-link" data-tr="Bağlantı / Detay →" data-en="Link / Details →">
+            <span class="placeholder-badge">[Varsa bağlantı]</span> <span>→</span>
+          </a>
+        </div>
 
-          <ul class="modules" aria-label="TerpWise modules">
-            <li>Speech Library</li><li>Glossary Builder</li><li>Micro-Drills</li><li>Analyze</li><li>Evaluate</li><li>Progress Tracking</li>
-          </ul>
+        <!-- Proje 3 (Düzenlenebilir Alan) -->
+        <div class="project-card">
+          <div>
+            <div class="project-tag" data-tr="Çeviri / Altyazı / Araştırma" data-en="Translation / Subtitling / Research">Çeviri / Altyazı / Araştırma</div>
+            <h3 class="project-title"><span class="placeholder-badge">[Proje 3 Adı]</span></h3>
+            <p class="project-desc" data-tr="[Bu projenin konusunu ve amacını anlatan 1-2 cümle ekleyin. Örnek: Belgesel altyazı lokalizasyonu veya sektörel terim bankası derlemesi.]" data-en="[Add 1-2 sentences describing Project 3.]">
+              <span class="placeholder-badge">[Proje 3 için 1-2 cümle açıklama ekleyin]</span>
+            </p>
+          </div>
+          <a href="#" class="project-link" data-tr="Bağlantı / Detay →" data-en="Link / Details →">
+            <span class="placeholder-badge">[Varsa bağlantı]</span> <span>→</span>
+          </a>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section aria-labelledby="interests">
-      <div class="grid">
-        <h2 id="interests"><span class="en">Interests</span><span class="tr">İlgi alanları</span></h2>
-        <ul class="interests">
-          <li><span class="en"><strong>Computer-assisted interpreter training</strong></span><span class="tr"><strong>Bilgisayar destekli sözlü çeviri eğitimi</strong></span>
-            <span class="en">What digital tools actually afford learners, and where current taxonomies fall short.</span><span class="tr">Dijital araçların öğrenciye gerçekte ne sunduğu ve mevcut sınıflandırmaların nerede yetersiz kaldığı.</span></li>
-          <li><span class="en"><strong>Self-regulated learning and self-efficacy</strong></span><span class="tr"><strong>Öz-düzenlemeli öğrenme ve öz-yeterlik</strong></span>
-            <span class="en">How student interpreters plan, monitor and judge their own practice.</span><span class="tr">Tercüman adaylarının kendi pratiklerini nasıl planladığı, izlediği ve değerlendirdiği.</span></li>
-          <li><span class="en"><strong>Machine interpreting</strong></span><span class="tr"><strong>Makine çevirisiyle sözlü çeviri</strong></span>
-            <span class="en">Speech recognition and translation cascades, and telling recognition errors apart from translation errors.</span><span class="tr">Konuşma tanıma ve çeviri zincirleri; tanıma hatalarını çeviri hatalarından ayırmak.</span></li>
-        </ul>
+  <!-- ==========================================
+       3. BECERİLERİM (SKILLS)
+       ========================================== -->
+  <section id="skills">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-tr="Yetkinlikler" data-en="Competencies">Yetkinlikler</span>
+        <h2 class="section-title" data-tr="Becerilerim" data-en="Skills & Tools">Becerilerim</h2>
       </div>
-    </section>
 
-    <section aria-labelledby="building">
-      <div class="grid">
-        <h2 id="building"><span class="en">Building</span><span class="tr">Geliştirdiklerim</span></h2>
-        <div class="prose">
-          <p class="en">Besides TerpWise, I build real-time speech translation: streaming recognition, machine translation, and the infrastructure that keeps latency low enough for a listener to follow along.</p>
-          <p class="tr">TerpWise'ın yanı sıra gerçek zamanlı konuşma çevirisi geliştiriyorum: akış halinde konuşma tanıma, makine çevirisi ve gecikmeyi dinleyicinin takip edebileceği kadar düşük tutan altyapı.</p>
-          <p class="en">Off duty: Assassin's Creed (preferably without the grind), EA FC on Xbox, and couch co-op chaos in Overcooked 2.</p>
-          <p class="tr">Mesai dışında: Assassin's Creed (mümkünse grind'sız), Xbox'ta EA FC ve Overcooked 2'de kanepe kaosu.</p>
+      <div class="skills-grid">
+        <!-- Çeviri Becerileri -->
+        <div class="skill-category">
+          <div class="skill-cat-title">
+            <span>🎙️</span>
+            <span data-tr="Sözlü Çeviri" data-en="Interpretation">Sözlü Çeviri</span>
+          </div>
+          <div class="skill-pill-list">
+            <span class="skill-pill" data-tr="Ardıl Çeviri (Consecutive)" data-en="Consecutive Interpretation">Ardıl Çeviri (Consecutive)</span>
+            <span class="skill-pill" data-tr="Simültane Çeviri" data-en="Simultaneous Interpretation">Simültane Çeviri</span>
+            <span class="skill-pill" data-tr="İkili / Diyalog Çevirisi" data-en="Liaison / Bilateral">İkili / Diyalog Çevirisi</span>
+            <span class="skill-pill" data-tr="Not Alma Teknikleri" data-en="Note-Taking Techniques">Not Alma Teknikleri</span>
+          </div>
+        </div>
+
+        <!-- CAT ve Çeviri Araçları -->
+        <div class="skill-category">
+          <div class="skill-cat-title">
+            <span>💻</span>
+            <span data-tr="CAT & Çeviri Araçları" data-en="CAT & Tools">CAT & Çeviri Araçları</span>
+          </div>
+          <div class="skill-pill-list">
+            <span class="skill-pill">SDL Trados Studio</span>
+            <span class="skill-pill">memoQ</span>
+            <span class="skill-pill" data-tr="Terminoloji Yönetimi" data-en="Terminology Management">Terminoloji Yönetimi</span>
+            <span class="skill-pill" data-tr="Çeviri Belleği (TM)" data-en="Translation Memory">Çeviri Belleği (TM)</span>
+          </div>
+        </div>
+
+        <!-- Multimedya & Altyazı -->
+        <div class="skill-category">
+          <div class="skill-cat-title">
+            <span>🎬</span>
+            <span data-tr="Altyazı & Tasarım" data-en="Subtitling & Design">Altyazı & Tasarım</span>
+          </div>
+          <div class="skill-pill-list">
+            <span class="skill-pill" data-tr="Altyazı Çevirisi" data-en="Audiovisual Subtitling">Altyazı Çevirisi</span>
+            <span class="skill-pill">Aegisub / Subtitle Edit</span>
+            <span class="skill-pill">Canva</span>
+            <span class="skill-pill" data-tr="Zamanlama (Spotting)" data-en="Timecoding & Spotting">Zamanlama (Spotting)</span>
+          </div>
+        </div>
+
+        <!-- Çalışma Dilleri -->
+        <div class="skill-category">
+          <div class="skill-cat-title">
+            <span>🌍</span>
+            <span data-tr="Çalışma Dilleri" data-en="Working Languages">Çalışma Dilleri</span>
+          </div>
+          <div class="skill-pill-list">
+            <span class="skill-pill" data-tr="Türkçe (Anadil / A Dili)" data-en="Turkish (Native / A Language)">Türkçe (Anadil / A Dili)</span>
+            <span class="skill-pill" data-tr="İngilizce (C2 / B Dili)" data-en="English (Fluent / B Language)">İngilizce (C2 / B Dili)</span>
+            <span class="skill-pill"><span class="placeholder-badge">[Varsa 3. dil]</span></span>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section aria-labelledby="contact" class="contact">
-      <div class="grid">
-        <h2 id="contact"><span class="en">Contact</span><span class="tr">İletişim</span></h2>
-        <div>
-          <a href="https://github.com/cihanunlu">github.com/cihanunlu</a>
+  <!-- ==========================================
+       4. DENEYİM (EXPERIENCE)
+       (Staj, gönüllü çeviri, kulüp, iş)
+       ========================================== -->
+  <section id="experience">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-tr="Geçmiş" data-en="Background">Geçmiş</span>
+        <h2 class="section-title" data-tr="Deneyim & Etkinlikler" data-en="Experience & Activities">Deneyim & Etkinlikler</h2>
+      </div>
+
+      <div class="timeline">
+        <!-- Deneyim 1 -->
+        <div class="timeline-item">
+          <div class="timeline-date">2023 — Günümüz</div>
+          <div>
+            <div class="timeline-role" data-tr="Öğrenci & Sözlü Çevirmen Adayı" data-en="Student & Interpreter Candidate">Öğrenci & Sözlü Çevirmen Adayı</div>
+            <div class="timeline-org">Essex Üniversitesi • Colchester, Birleşik Krallık</div>
+            <p data-tr="Akademik çeviribilim eğitimi, simüle konferans çalışmaları ve ileri düzey ikili dil uygulamaları." data-en="Academic translation and interpretation training, mock conference simulations, and advanced bilingual coursework.">
+              Akademik çeviribilim eğitimi, simüle konferans çalışmaları ve ileri düzey ikili dil uygulamaları.
+            </p>
+          </div>
+        </div>
+
+        <!-- Deneyim 2 (Düzenlenebilir Alan: Gönüllü Çeviri / Kulüp / Staj) -->
+        <div class="timeline-item">
+          <div class="timeline-date"><span class="placeholder-badge">[Tarih Aralığı]</span></div>
+          <div>
+            <div class="timeline-role"><span class="placeholder-badge">[Pozisyon / Görev Adı - ör. Gönüllü Çevirmen]</span></div>
+            <div class="timeline-org"><span class="placeholder-badge">[Kurum / Kulüp / Platform Adı]</span></div>
+            <p data-tr="[Burada yaptığınız katkıyı 1-2 cümleyle açıklayın. Ör. Konferans organizasyonunda mihmandarlık ve sözlü çeviri desteği.]" data-en="[Describe your role and key accomplishments in 1-2 sentences.]">
+              <span class="placeholder-badge">[Deneyim detayınızı buraya ekleyin]</span>
+            </p>
+          </div>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <footer>© 2026 Cihan Ünlü</footer>
-</div>
+  <!-- ==========================================
+       5. İLGİ ALANLARI VE HOBİLER
+       ========================================== -->
+  <section id="interests">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-tr="Kişisel" data-en="Personal">Kişisel</span>
+        <h2 class="section-title" data-tr="İlgi Alanlarım & Hobilerim" data-en="Interests & Hobbies">İlgi Alanlarım & Hobilerim</h2>
+      </div>
 
-<script>
-(function(){
-  var root=document.documentElement;
-  function setLang(l){
-    root.setAttribute('data-ui',l); root.lang=l;
-    document.querySelectorAll('.switch button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.set===l?'true':'false')});
-    try{localStorage.setItem('ui-lang',l)}catch(e){}
-  }
-  var saved=null; try{saved=localStorage.getItem('ui-lang')}catch(e){}
-  if(saved==='tr'||saved==='en') setLang(saved);
-  document.querySelectorAll('.switch button').forEach(function(b){b.addEventListener('click',function(){setLang(b.dataset.set)})});
+      <div class="interests-container">
+        <div class="interest-pill">
+          <span>📺</span>
+          <span data-tr="Dizi & Belgesel Altyazısı" data-en="Series & Documentary Subtitling">Dizi & Belgesel Altyazısı</span>
+        </div>
+        <div class="interest-pill">
+          <span>📚</span>
+          <span data-tr="Terminoloji & Sözlük Hazırlama" data-en="Terminology & Lexicography">Terminoloji & Sözlük Hazırlama</span>
+        </div>
+        <div class="interest-pill">
+          <span>🌐</span>
+          <span data-tr="Kültürlerarası İletişim" data-en="Cross-Cultural Communication">Kültürlerarası İletişim</span>
+        </div>
+        <div class="interest-pill">
+          <span>📸</span>
+          <span class="placeholder-badge">[Hobinizi buraya ekleyin - ör. Fotoğrafçılık]</span>
+        </div>
+        <div class="interest-pill">
+          <span>🏀</span>
+          <span class="placeholder-badge">[Hobinizi buraya ekleyin - ör. Basketbol / Müzik]</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  var pairs=[
-    ["I study how interpreters learn to practise on their own.","Tercümanların kendi başlarına pratik yapmayı nasıl öğrendiğini inceliyorum."],
-    ["And I build the tools that help them do it.","Ve bunu yapmalarına yardımcı olan araçları geliştiriyorum."],
-    ["Always between two languages, a second or two behind.","Hep iki dil arasında, bir iki saniye geriden."]
-  ];
-  var src=document.getElementById('src'), tgt=document.getElementById('tgt'), lag=document.getElementById('lag');
-  function fill(el,text){el.innerHTML='';return text.split(' ').map(function(w,i,a){var s=document.createElement('span');s.className='w';s.textContent=w+(i<a.length-1?' ':'');el.appendChild(s);return s})}
-  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce){src.textContent=pairs[0][0];tgt.textContent=pairs[0][1];lag.textContent='1.8';return}
+  <!-- ==========================================
+       6. İLETİŞİM (CONTACT)
+       ========================================== -->
+  <section id="contact" style="border-bottom: none;">
+    <div class="container">
+      <div class="contact-card">
+        <span class="section-tag" style="color: #f7eedb;" data-tr="Bağlantı Kurun" data-en="Get in touch">Bağlantı Kurun</span>
+        <h2 class="serif-font" style="font-size: 2.2rem;" data-tr="Birlikte Çalışalım" data-en="Let's Work Together">Birlikte Çalışalım</h2>
+        <p data-tr="Sözlü çeviri projeleri, konferans asistanlığı veya profesyonel iş birlikleri için aşağıdaki kanallardan bana dilediğiniz zaman ulaşabilirsiniz." data-en="Feel free to reach out for interpretation inquiries, conference assistance, or professional collaborations.">
+          Sözlü çeviri projeleri, konferans asistanlığı veya profesyonel iş birlikleri için aşağıdaki kanallardan bana dilediğiniz zaman ulaşabilirsiniz.
+        </p>
 
-  var STEP=330, DELAY=1800, i=0, t0=0, timers=[];
-  function play(){
-    var p=pairs[i%pairs.length]; i++;
-    var a=fill(src,p[0]), b=fill(tgt,p[1]);
-    t0=performance.now();
-    a.forEach(function(s,k){timers.push(setTimeout(function(){s.classList.add('on')},k*STEP))});
-    var bStep=Math.max(240,(a.length*STEP)/b.length);
-    b.forEach(function(s,k){timers.push(setTimeout(function(){s.classList.add('on')},DELAY+k*bStep))});
-    var end=DELAY+b.length*bStep+2600;
-    timers.push(setTimeout(play,end));
-  }
-  function tick(){
-    var e=(performance.now()-t0)/1000;
-    var v=e<DELAY/1000?e:DELAY/1000+Math.sin(e*1.7)*.15;
-    lag.textContent=Math.max(0,v).toFixed(1);
-    requestAnimationFrame(tick);
-  }
-  play(); requestAnimationFrame(tick);
-})();
-</script>
+        <div class="contact-methods">
+          <!-- Okul E-postası -->
+          <a href="mailto:ornek@essex.ac.uk" class="contact-item">
+            <div class="contact-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </div>
+            <div>
+              <div class="contact-label" data-tr="Üniversite E-postası" data-en="University Email">Üniversite E-postası</div>
+              <div class="contact-val"><span class="placeholder-badge">[okul-epostaniz@essex.ac.uk]</span></div>
+            </div>
+          </a>
+
+          <!-- LinkedIn -->
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="contact-item">
+            <div class="contact-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            </div>
+            <div>
+              <div class="contact-label">LinkedIn</div>
+              <div class="contact-val"><span class="placeholder-badge">[LinkedIn Profil Bağlantınız]</span></div>
+            </div>
+          </a>
+
+          <!-- GitHub veya Web -->
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="contact-item">
+            <div class="contact-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            </div>
+            <div>
+              <div class="contact-label">GitHub / Web</div>
+              <div class="contact-val"><span class="placeholder-badge">[GitHub veya Web Bağlantınız]</span></div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer>
+    <div class="container">
+      <p>© 2026 Cihan Ünlü • <span data-tr="Sözlü Çevirmen" data-en="Interpreter">Sözlü Çevirmen</span> • Essex, UK</p>
+    </div>
+  </footer>
+
+  <!-- =========================================================
+       JAVASCRIPT:
+       1. Açılışta Daktilo (Typewriter) Efekti
+       2. Çift Dil (TR - EN) Değiştirme Fonksiyonu
+       ========================================================= -->
+  <script>
+    /* --------------------------------------------------
+       1. DAKTİLO EFEKTİ (Adınız açılışta harf harf belirir)
+       -------------------------------------------------- */
+    const fullName = "Cihan Ünlü";
+    const typewriterElement = document.getElementById("typewriterText");
+    let charIndex = 0;
+
+    function typeWriter() {
+      if (charIndex < fullName.length) {
+        typewriterElement.textContent += fullName.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeWriter, 110); // Yazma hızı (milisaniye)
+      }
+    }
+
+    // Sayfa yüklendiğinde daktilo efektini başlat
+    window.addEventListener("DOMContentLoaded", () => {
+      setTimeout(typeWriter, 200);
+    });
+
+    /* --------------------------------------------------
+       2. İKİ DİLLİ (TR / EN) GEÇİŞ SİSTEMİ
+       Sitedeki tüm metinleri tek tıkla İngilizce veya Türkçe yapar.
+       -------------------------------------------------- */
+    let currentLang = 'tr';
+
+    function setLanguage(lang) {
+      currentLang = lang;
+
+      // Butonların aktiflik durumunu güncelle
+      const btnTR = document.getElementById('btnLangTR');
+      const btnEN = document.getElementById('btnLangEN');
+
+      if (lang === 'tr') {
+        btnTR.classList.add('active');
+        btnEN.classList.remove('active');
+        document.documentElement.lang = 'tr';
+      } else {
+        btnEN.classList.add('active');
+        btnTR.classList.remove('active');
+        document.documentElement.lang = 'en';
+      }
+
+      // Sayfadaki data-tr ve data-en etiketine sahip tüm elementleri güncelle
+      const translatableElements = document.querySelectorAll('[data-tr][data-en]');
+      translatableElements.forEach(el => {
+        const text = el.getAttribute(`data-${lang}`);
+        if (text) {
+          // İçinde placeholder-badge varsa çocuk elementleri koru
+          const badge = el.querySelector('.placeholder-badge');
+          if (badge) {
+            // rozet korunarak metin güncellenir
+          } else {
+            el.textContent = text;
+          }
+        }
+      });
+    }
+  </script>
 </body>
 </html>
